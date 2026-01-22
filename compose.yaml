@@ -1,16 +1,37 @@
 services:
+  mysql-db:
+    container_name: mysql-db
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: user_db
+      MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./mysql/init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -uroot -p$MYSQL_ROOT_PASSWORD"]
+      interval: 5s
+      retries: 10
+
   user-service:
     container_name: user-service
-    image: 267837905230.dkr.ecr.ap-northeast-2.amazonaws.com/board-system/user-service:latest
+    image: ghcr.io/yunjeongwon/msa-user-service:latest
     ports: 
       - "8080:8080"
+    depends_on:
+      mysql-db:
+        condition: service_healthy
 
   board-service:
     container_name: board-service
-    image: 267837905230.dkr.ecr.ap-northeast-2.amazonaws.com/board-system/board-service:latest
+    image: ghcr.io/yunjeongwon/msa-board-service:latest
     ports:
       - "8081:8080"
     depends_on:
+      mysql-db:
+        condition: service_healthy
       cache-server:
         condition: service_healthy
   
@@ -23,19 +44,22 @@ services:
       test: ["CMD", "redis-cli", "ping"]
       interval: 5s
       retries: 10
-      
+
   point-service:
     container_name: point-service
-    image: 267837905230.dkr.ecr.ap-northeast-2.amazonaws.com/board-system/point-service:latest
+    image: ghcr.io/yunjeongwon/msa-point-service:latest
     ports:
       - "8082:8080"
-  
+    depends_on:
+      mysql-db:
+        condition: service_healthy
+
   api-gateway-service:
     container_name: api-gateway-service
-    image: 267837905230.dkr.ecr.ap-northeast-2.amazonaws.com/board-system/api-gateway-service:latest
+    image: ghcr.io/yunjeongwon/msa-api-gateway-service:latest
     ports:
       - "8000:8080"
-  
+
   kafka-server:
     image: apache/kafka:4.1.0
     container_name: kafka-server
@@ -62,4 +86,7 @@ services:
       # KAFKA_SHARE_COORDINATOR_STATE_TOPIC_MIN_ISR: 1
       # KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
       # KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
-      
+
+volumes:
+  mysql-data:
+    name: board-system-mysql-data
