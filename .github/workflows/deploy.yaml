@@ -1,7 +1,8 @@
 name: infra deploy
 
 on:
-  repository_dispatch
+  repository_dispatch:
+    types: [deploy]
 
 jobs:
   Deploy:
