@@ -6,6 +6,15 @@ on:
       service:
         required: true
         type: string
+    secrets:
+      EC2_HOST:
+        required: true
+      EC2_USERNAME:
+        required: true
+      EC2_PRIVATE_KEY:
+        required: true
+      MYSQL_ROOT_PASSWORD:
+        required: true
 
 jobs:
   Infra-Deploy:
