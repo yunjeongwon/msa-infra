@@ -10,6 +10,8 @@ on:
 jobs:
   Deploy:
     runs-on: ubuntu-latest
+    env:
+      MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
     steps:
       - name: ec2 SSH
         uses: appleboy/ssh-action@v1
