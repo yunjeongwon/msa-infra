@@ -1,8 +1,11 @@
 name: infra deploy
 
 on:
-  repository_dispatch:
-    types: [deploy]
+  workflow_call:
+    inputs:
+      service:
+        required: true
+        type: string
 
 jobs:
   Deploy:
@@ -17,6 +20,6 @@ jobs:
           env:
             MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
           script: |
-            SERVICE=${{ github.event.client_payload.service }}
+            SERVICE=${{ inputs.service }}
             docker compose pull $SERVICE
             docker compose up -d $SERVICE
