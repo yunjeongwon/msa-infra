@@ -1,24 +1,13 @@
-name: infra deploy
+name: infra deployment
 
 on:
-  workflow_call:
-    inputs:
-      service:
-        required: true
-        type: string
-    secrets:
-      EC2_HOST:
-        required: true
-      EC2_USERNAME:
-        required: true
-      EC2_PRIVATE_KEY:
-        required: true
-      MYSQL_ROOT_PASSWORD:
-        required: true
+  repository_dispatch:
+    types: [deploy]
 
 jobs:
   Infra-Deploy:
     runs-on: ubuntu-latest
+    environment: production
     env:
       MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
     steps:
