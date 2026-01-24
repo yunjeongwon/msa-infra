@@ -5,12 +5,15 @@ on:
     types: [deploy]
 
 jobs:
-  Infra-Deploy:
+  Deploy:
     runs-on: ubuntu-latest
     environment: production
     env:
       MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
     steps:
+      - name: test
+        run: echo ${{ github.event.client_payload.service }}
+        
       - name: ec2 SSH
         uses: appleboy/ssh-action@v1
         with:
@@ -19,6 +22,6 @@ jobs:
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           envs: MYSQL_ROOT_PASSWORD
           script: |
-            SERVICE=${{ inputs.service }}
+            SERVICE=${{ github.event.client_payload.service }}
             docker compose pull $SERVICE
             docker compose up -d $SERVICE
