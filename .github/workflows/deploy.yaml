@@ -9,8 +9,13 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     steps:
-      - name: test
-        run: echo ${{ github.event.client_payload.service }}
+      - name: dehub
+        run: |
+          echo "SERVICE=${{ github.event.client_payload.service }}"
+          echo "HOST=${{ secrets.EC2_HOST }}"
+          echo "USER=${{ secrets.EC2_USERNAME }}"
+          echo "KEY=${{ secrets.EC2_PRIVATE_KEY }}"
+          echo "PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}"
         
       - name: ec2 SSH
         uses: appleboy/ssh-action@v1
