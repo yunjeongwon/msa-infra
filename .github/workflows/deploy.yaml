@@ -28,7 +28,7 @@ jobs:
           # envs: MYSQL_ROOT_PASSWORD
           script_stop: true
           script: |
-            cd mds-infra
+            cd msa-infra
             SERVICE=${{ github.event.client_payload.service }}
             docker compose pull $SERVICE
             docker compose up -d $SERVICE
