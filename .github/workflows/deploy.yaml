@@ -7,9 +7,9 @@ on:
 jobs:
   Deploy:
     runs-on: ubuntu-latest
-    environment: production
+    # environment: production
     steps:
-      - name: dehub
+      - name: debug
         run: |
           echo "SERVICE=${{ github.event.client_payload.service }}"
           echo "HOST=${{ secrets.EC2_HOST }}"
