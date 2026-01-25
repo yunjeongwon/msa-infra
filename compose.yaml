@@ -20,6 +20,10 @@ services:
     image: ghcr.io/yunjeongwon/msa-user-service:latest
     ports: 
       - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/user_db
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     depends_on:
       mysql-db:
         condition: service_healthy
@@ -29,6 +33,10 @@ services:
     image: ghcr.io/yunjeongwon/msa-board-service:latest
     ports:
       - "8081:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/board_db
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     depends_on:
       mysql-db:
         condition: service_healthy
@@ -50,6 +58,10 @@ services:
     image: ghcr.io/yunjeongwon/msa-point-service:latest
     ports:
       - "8082:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/point_db
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     depends_on:
       mysql-db:
         condition: service_healthy
