@@ -19,13 +19,14 @@ jobs:
         
       - name: ec2 SSH
         uses: appleboy/ssh-action@v1
-        env:
-          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+        # env:
+        #   MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
-          envs: MYSQL_ROOT_PASSWORD
+          # envs: MYSQL_ROOT_PASSWORD
+          script_stop: true
           script: |
             SERVICE=${{ github.event.client_payload.service }}
             docker compose pull $SERVICE
