@@ -19,13 +19,13 @@ jobs:
         
       - name: ec2 SSH
         uses: appleboy/ssh-action@v1.0.3
-        # env:
-        #   MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+        env:
+          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
-          # envs: MYSQL_ROOT_PASSWORD
+          envs: MYSQL_ROOT_PASSWORD
           script_stop: true
           script: |
             cd msa-infra
