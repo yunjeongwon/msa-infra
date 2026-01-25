@@ -8,14 +8,14 @@ jobs:
   Deploy:
     runs-on: ubuntu-latest
     environment: production
-    env:
-      MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
     steps:
       - name: test
         run: echo ${{ github.event.client_payload.service }}
         
       - name: ec2 SSH
         uses: appleboy/ssh-action@v1
+        env:
+          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
