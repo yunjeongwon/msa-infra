@@ -9,14 +9,6 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     steps:
-      - name: debug
-        run: |
-          echo "SERVICE=${{ github.event.client_payload.service }}"
-          echo "PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}"
-          echo "HOST=${{ secrets.EC2_HOST }}"
-          echo "USER=${{ secrets.EC2_USERNAME }}"
-          echo "KEY=${{ secrets.EC2_PRIVATE_KEY }}"
-        
       - name: ec2 SSH
         uses: appleboy/ssh-action@v1.0.3
         env:
@@ -29,6 +21,5 @@ jobs:
           script_stop: true
           script: |
             cd msa-infra
-            SERVICE=${{ github.event.client_payload.service }}
-            docker compose pull $SERVICE
-            docker compose up -d $SERVICE
+            docker compose pull
+            docker compose up -d
