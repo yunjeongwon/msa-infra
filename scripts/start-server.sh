@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "---------- 서버 배포 시작 ----------"
-cd msa-infra
+cd app
 DB_HOST=$(aws ssm get-parameter \
   --name "/prod/app/DB_HOST" \
   --query Parameter.Value \

@@ -3,7 +3,7 @@ os: linux
 
 files:
   - source: /
-    destination: /home/ubuntu/msa-infra
+    destination: /home/ubuntu/app
 
 permissions:
   - object: /
