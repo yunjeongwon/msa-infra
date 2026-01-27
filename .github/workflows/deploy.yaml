@@ -48,7 +48,7 @@ jobs:
           aws deploy create-deployment \
             --application-name board-system-application \
             --deployment-config-name CodeDeployDefault.AllAtOnce \
-            --deployment-group-name board-system-dployment-group \
+            --deployment-group-name board-system-deployment-group \
             --s3-location bucket=board-system-bucket,bundleType=tgz,key=${{ github.sha }}.tar.gz
 
       # - name: ec2 SSH
