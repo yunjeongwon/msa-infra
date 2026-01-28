@@ -9,11 +9,13 @@ MSA 백엔드 포트폴리오 프로젝트입니다.
 
 ## Architecture Overview
 
+```
 [ Client ]
       ↓
 [ Gateway ]
       ↓
 [ Board Service ] ──▶ (Kafka Event) ──▶ [ Activity Service ]
+```
 
 ## Why Event-Driven
 
