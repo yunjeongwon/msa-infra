@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 echo "---------- 서버 배포 시작 ----------"
 cd /home/ubuntu/app
@@ -24,6 +24,8 @@ JWT_SECRET=${JWT_SECRET}
 SPRING_PROFILES_ACTIVE=prod
 EOF
 
+set -e
 docker compose pull
 docker compose up -d
+exit 0
 echo "---------- 서버 배포 끝 ----------"
