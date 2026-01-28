@@ -38,7 +38,7 @@ jobs:
             --overwrite
 
       - name: zip
-        run: tar -zcvf ${{ github.sha }}.tar.gz appspec.yaml scripts mysql compose.yaml
+        run: tar -zcvf ${{ github.sha }}.tar.gz appspec.yml scripts mysql compose.yml
 
       - name: s3 upload
         run: aws s3 cp --region ap-northeast-2 ${{ github.sha }}.tar.gz s3://board-system-bucket/${{ github.sha }}.tar.gz
