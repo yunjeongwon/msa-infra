@@ -20,7 +20,7 @@ spec:
         - name: point-service
           image: ghcr.io/yunjeongwon/msa-point-service:latest
           ports:
-            - containerPorts: 8080
+            - containerPort: 8080
           envFrom:
             - configRef:
                 name: point-config
