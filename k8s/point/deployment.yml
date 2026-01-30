@@ -18,7 +18,7 @@ spec:
         - name: regcred
       containers:
         - name: point-service
-          image: ghcr.io/yunjeongwon/msa-point-service:latest
+          image: 267837905230.dkr.ecr.ap-northeast-2.amazonaws.com/board-system/point-service:latest
           ports:
             - containerPort: 8080
           envFrom:

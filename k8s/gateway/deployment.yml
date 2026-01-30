@@ -18,7 +18,7 @@ spec:
         - name: regcred
       containers:
         - name: gateway-service
-          image: ghcr.io/yunjeongwon/msa-api-gateway-service:latest
+          image: 267837905230.dkr.ecr.ap-northeast-2.amazonaws.com/board-system/gateway-service:latest
           ports:
             - containerPort: 8080
           envFrom:

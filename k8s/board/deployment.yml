@@ -18,7 +18,7 @@ spec:
         - name: regcred
       containers:
         - name: board-service
-          image: ghcr.io/yunjeongwon/msa-board-service:latest
+          image: 267837905230.dkr.ecr.ap-northeast-2.amazonaws.com/board-system/board-service:latest
           ports:
             - containerPort: 8080
           envFrom:
