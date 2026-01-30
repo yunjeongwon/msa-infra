@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 
 metadata:
-  name: api-gateway-service
+  name: gateway-service
 
 spec:
   replicas: 2
