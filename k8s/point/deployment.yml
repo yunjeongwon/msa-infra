@@ -14,6 +14,8 @@ spec:
       labels:
         app: point-service
     spec:
+      imagePullSecrets:
+        - name: regcred
       containers:
         - name: point-service
           image: ghcr.io/yunjeongwon/msa-point-service:latest

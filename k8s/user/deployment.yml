@@ -14,6 +14,8 @@ spec:
       labels:
         app: user-service
     spec:
+      imagePullSecrets:
+        - name: regcred
       containers:
         - name: user-service
           image: 267837905230.dkr.ecr.ap-northeast-2.amazonaws.com/board-system/user-service:latest
