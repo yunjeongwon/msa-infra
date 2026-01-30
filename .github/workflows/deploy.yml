@@ -12,57 +12,63 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
+      # - name: put-parameter
+      #   run: |
+      #     aws ssm put-parameter \
+      #       --name "/prod/app/DB_HOST" \
+      #       --value ${{ secrets.DB_HOST }} \
+      #       --type String \
+      #       --overwrite
+      #     aws ssm put-parameter \
+      #       --name "/prod/app/MYSQL_ROOT_PASSWORD" \
+      #       --value ${{ secrets.MYSQL_ROOT_PASSWORD }} \
+      #       --type SecureString \
+      #       --overwrite
+      #     aws ssm put-parameter \
+      #       --name "/prod/app/JWT_SECRET" \
+      #       --value ${{ secrets.JWT_SECRET }} \
+      #       --type SecureString \
+      #       --overwrite
+
+      - name: Show payload
+        run: echo "Service = ${{ github.event.client_payload.service }}"
+
+      - name: ec2 SSH
+        uses: appleboy/ssh-action@v1.0.3
+        env:
+          DB_HOST: ${{ secrets.DB_HOST }}
+          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          SERVICE: ${{ github.event.client_payload.service }}
         with:
-          aws-region: ap-northeast-2
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          envs: DB_HOST, MYSQL_ROOT_PASSWORD, JWT_SECRET, SERVICE
+          script_stop: true
+          script: |
+            cd /home/ubuntu/msa-infra
 
-      - name: put-parameter
-        run: |
-          aws ssm put-parameter \
-            --name "/prod/app/DB_HOST" \
-            --value ${{ secrets.DB_HOST }} \
-            --type String \
-            --overwrite
-          aws ssm put-parameter \
-            --name "/prod/app/MYSQL_ROOT_PASSWORD" \
-            --value ${{ secrets.MYSQL_ROOT_PASSWORD }} \
-            --type SecureString \
-            --overwrite
-          aws ssm put-parameter \
-            --name "/prod/app/JWT_SECRET" \
-            --value ${{ secrets.JWT_SECRET }} \
-            --type SecureString \
-            --overwrite
+            kubectl apply -f k8s/mysql
+            kubectl apply -f k8s/cache
+            kubectl apply -f k8s/kafka
+            
+            SERVICE="${SERVICE}"
 
-      - name: zip
-        run: tar -zcvf ${{ github.sha }}.tar.gz appspec.yml scripts mysql compose.yml
-
-      - name: s3 upload
-        run: aws s3 cp --region ap-northeast-2 ${{ github.sha }}.tar.gz s3://board-system-bucket/${{ github.sha }}.tar.gz
-
-      - name: deploy
-        run: |
-          aws deploy create-deployment \
-            --application-name board-system-application \
-            --deployment-config-name CodeDeployDefault.AllAtOnce \
-            --deployment-group-name board-system-deployment-group \
-            --s3-location bucket=board-system-bucket,bundleType=tgz,key=${{ github.sha }}.tar.gz
-
-      # - name: ec2 SSH
-      #   uses: appleboy/ssh-action@v1.0.3
-      #   env:
-      #     MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
-      #     JWT_SECRET: ${{ secrets.JWT_SECRET }}
-      #   with:
-      #     host: ${{ secrets.EC2_HOST }}
-      #     username: ${{ secrets.EC2_USERNAME }}
-      #     key: ${{ secrets.EC2_PRIVATE_KEY }}
-      #     envs: MYSQL_ROOT_PASSWORD, JWT_SECRET
-      #     script_stop: true
-      #     script: |
-      #       cd msa-infra
-      #       docker compose pull
-      #       docker compose up -d
+            if [ "${SERVICE}" = "user-service" ]; then
+              kubectl apply -f k8s/user
+              kubectl rollout restart deployment user-service
+            elif [ "${SERVICE}" = "board-service" ]; then
+              kubectl apply -f k8s/board
+              kubectl rollout restart deployment board-service
+            elif [ "${SERVICE}" = "point-service" ]; then
+              kubectl apply -f k8s/point
+              kubectl rollout restart deployment point-service
+            elif [ "${SERVICE}" = "gateway-service" ]; then
+              kubectl apply -f k8s/gateway
+              kubectl rollout restart deployment gateway-service
+            else
+              echo "Unknown service: ${SERVICE}"
+              exit 1
+            fi
+            

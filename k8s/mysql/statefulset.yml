@@ -15,6 +15,10 @@ spec:
       labels:
         app: mysql-db
     spec:
+      volumes:
+        - name: mysql-init
+          configMap:
+            name: mysql-init
       containers:
         - name: mysql-db
           image: mysql:8.0
@@ -30,15 +34,11 @@ spec:
               mountPath: /var/lib/mysql
             - name: mysql-init
               mountPath: /docker-entrypoint-initdb.d
-    volumeClaimTemplates:
-      - metadata:
-          name: mysql-data
-        spec:
-          accessModes: ["ReadWriteOnce"]
-          resources:
-            requests:
-              storage: 1Gi
-    volumes:
-      - name: mysql-init
-        configMap:
-          name: mysql-init-sql
+  volumeClaimTemplates:
+    - metadata:
+        name: mysql-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 1Gi
