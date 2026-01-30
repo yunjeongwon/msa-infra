@@ -12,24 +12,6 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      # - name: put-parameter
-      #   run: |
-      #     aws ssm put-parameter \
-      #       --name "/prod/app/DB_HOST" \
-      #       --value ${{ secrets.DB_HOST }} \
-      #       --type String \
-      #       --overwrite
-      #     aws ssm put-parameter \
-      #       --name "/prod/app/MYSQL_ROOT_PASSWORD" \
-      #       --value ${{ secrets.MYSQL_ROOT_PASSWORD }} \
-      #       --type SecureString \
-      #       --overwrite
-      #     aws ssm put-parameter \
-      #       --name "/prod/app/JWT_SECRET" \
-      #       --value ${{ secrets.JWT_SECRET }} \
-      #       --type SecureString \
-      #       --overwrite
-
       - name: Show payload
         run: echo "Service = ${{ github.event.client_payload.service }}"
 

@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: user-service
-          image: ghcr.io/yunjeongwon/msa-user-service:latest
+          image: 267837905230.dkr.ecr.ap-northeast-2.amazonaws.com/board-system/user-service:latest
           ports:
             - containerPort: 8080
           envFrom:
