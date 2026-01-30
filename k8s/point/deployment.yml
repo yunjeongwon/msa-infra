@@ -22,8 +22,6 @@ spec:
           ports:
             - containerPort: 8080
           envFrom:
-            - configRef:
-                name: point-config
             - secretRef:
                 name: point-secret
                 
