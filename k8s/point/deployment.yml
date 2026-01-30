@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: point-service
+
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: point-service
+  template:
+    metadata:
+      labels:
+        app: point-service
+    spec:
+      containers:
+        - name: point-service
+          image: ghcr.io/yunjeongwon/msa-point-service:latest
+          ports:
+            - containerPorts: 8080
+          envFrom:
+            - configRef:
+                name: point-config
+            - secretRef:
+                name: point-secret
+                

@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: StatefulSet
+
+metadata:
+  name: kafka-server
+
+spec:
+  replicas: 1
+  serviceName: kafka-server 
+  selector:
+    matchLabels:
+      app: kafka-server
+  template:
+    metadata:
+      labels:
+        app: kafka-server
+    spec:
+      containers:
+        - name: kafka-server
+          image: apache/kafka:4.1.0
+          ports:
+            - containerPort: 9092
+            - containerPort: 9093
+          envFrom:
+            - configMapRef:
+                name: kafka-config
