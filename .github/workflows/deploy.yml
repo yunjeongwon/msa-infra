@@ -31,7 +31,6 @@ jobs:
           script: |
             cd /home/ubuntu/msa-infra
 
-            kubectl apply -f k8s/mysql
             kubectl apply -f k8s/cache
             kubectl apply -f k8s/kafka
             
